@@ -1,0 +1,33 @@
+name: Shopizer Shop CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npx react-scripts test --watchAll=false --passWithNoTests
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shopizer-shop-build
+          path: build/
