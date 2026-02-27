@@ -22,12 +22,10 @@ const TabProduct = ({
 }) => {
   // const [featuredData, setFeaturedData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getProductList();
-    if (defaultStore) {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }
-  }, []);
+  }, [defaultStore, currentLanguageCode]);
   const getProductList = async () => {
     setLoader(true)
     let action = constant.ACTION.PRODUCT_GROUP + 'FEATURED_ITEM?store=' + defaultStore + '&lang=' + currentLanguageCode;

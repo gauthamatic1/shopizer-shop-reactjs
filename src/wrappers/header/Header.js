@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { multilanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
 import Logo from "../../components/header/Logo";
@@ -26,7 +25,6 @@ const Header = ({
   getCurrentLocation,
   currentLanguageCode
 }) => {
-  const history = useHistory();
   const [scroll, setScroll] = useState(0);
   const [headerTop, setHeaderTop] = useState(0);
   const [categoryData, setCategoryData] = useState([]);
