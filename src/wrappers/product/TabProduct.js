@@ -23,39 +23,34 @@ const TabProduct = ({
   // const [featuredData, setFeaturedData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   useEffect(() => {
-    getProductList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const getProductList = async () => {
-    setLoader(true)
-    let action = constant.ACTION.PRODUCT_GROUP + 'FEATURED_ITEM?store=' + defaultStore + '&lang=' + currentLanguageCode;
-    try {
-      let response = await WebService.get(action);
-      // console.log(response);
-      if (response) {
-        let category = [{ 'id': '', 'name': 'All', 'code': 'all', data: response.products }];
-        response.products.forEach((item) => {
-          if (item.categories !== null) {
-            item.categories.forEach((a) => {
-              // console.log(a)
-              let index = category.findIndex(value => value.id === a.id);
-              // console.log(index);
-              if (index === -1) {
-                category.push({ 'id': a.description.id, 'name': a.description.name, 'code': a.code, data: [item] })
-              } else {
-                category[index].data.push(item)
-              }
-            })
-          }
-        });
-        // setFeaturedData(response.products)
-        setCategoryData(category)
+    const getProductList = async () => {
+      setLoader(true)
+      let action = constant.ACTION.PRODUCT_GROUP + 'FEATURED_ITEM?store=' + defaultStore + '&lang=' + currentLanguageCode;
+      try {
+        let response = await WebService.get(action);
+        if (response) {
+          let category = [{ 'id': '', 'name': 'All', 'code': 'all', data: response.products }];
+          response.products.forEach((item) => {
+            if (item.categories !== null) {
+              item.categories.forEach((a) => {
+                let index = category.findIndex(value => value.id === a.id);
+                if (index === -1) {
+                  category.push({ 'id': a.description.id, 'name': a.description.name, 'code': a.code, data: [item] })
+                } else {
+                  category[index].data.push(item)
+                }
+              })
+            }
+          });
+          setCategoryData(category)
+          setLoader(false)
+        }
+      } catch (error) {
         setLoader(false)
       }
-    } catch (error) {
-      setLoader(false)
     }
-  }
+    getProductList();
+  }, [defaultStore, currentLanguageCode, setLoader]);
   return (
     <div
       className={`product-area ${spaceTopClass ? spaceTopClass : ""} ${

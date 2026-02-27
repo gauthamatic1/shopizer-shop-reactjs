@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { multilanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
 import Logo from "../../components/header/Logo";
@@ -26,7 +25,6 @@ const Header = ({
   getCurrentLocation,
   currentLanguageCode
 }) => {
-  const history = useHistory();
   const [scroll, setScroll] = useState(0);
   const [headerTop, setHeaderTop] = useState(0);
   const [categoryData, setCategoryData] = useState([]);
@@ -48,26 +46,13 @@ const Header = ({
 
     // let action = 'actuator/health/ping';
     try {
-      // console.log("*********************************");
-      // console.log("BASE URL " + window._env_.APP_BASE_URL);
-      // console.log("APP_API_VERSION " + window._env_.APP_API_VERSION);
-      // console.log("APP_MERCHANT " + window._env_.APP_MERCHANT);
-      // console.log("*********************************");
-      let response = await WebService.get(window._env_.APP_BASE_URL + '/actuator/health/ping');
-
-      if (response) {
-        // console.log(response)
-        if (response.status === 'UP') {
-          setMerchant()
-          getCurrentLocation();
-          getCategoryHierarchy();
-          getContent();
-        } else {
-          history.push('/not-found')
-        }
-      }
+      // Always load merchant and data, regardless of health check
+      setMerchant()
+      getCurrentLocation();
+      getCategoryHierarchy();
+      getContent();
     } catch (error) {
-      history.push('/not-found')
+      console.error('Init error:', error);
     }
 
 
